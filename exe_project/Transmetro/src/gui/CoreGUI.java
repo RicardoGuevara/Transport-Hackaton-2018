@@ -27,11 +27,36 @@ public class CoreGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        paneles_general = new javax.swing.JTabbedPane();
+        general = new javax.swing.JPanel();
+        map = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1160, 620));
+
+        map.setMinimumSize(new java.awt.Dimension(50, 50));
+        map.setPreferredSize(new java.awt.Dimension(500, 500));
+
+        javax.swing.GroupLayout generalLayout = new javax.swing.GroupLayout(general);
+        general.setLayout(generalLayout);
+        generalLayout.setHorizontalGroup(
+            generalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, generalLayout.createSequentialGroup()
+                .addContainerGap(592, Short.MAX_VALUE)
+                .addComponent(map, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        generalLayout.setVerticalGroup(
+            generalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(generalLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(map, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(30, Short.MAX_VALUE))
+        );
+
+        paneles_general.addTab("General", general);
+
+        getContentPane().add(paneles_general, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1160, 620));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -72,6 +97,8 @@ public class CoreGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JPanel general;
+    private javax.swing.JPanel map;
+    private javax.swing.JTabbedPane paneles_general;
     // End of variables declaration//GEN-END:variables
 }

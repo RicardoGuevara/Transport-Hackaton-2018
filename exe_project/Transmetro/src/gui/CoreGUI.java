@@ -29,7 +29,7 @@ public class CoreGUI extends javax.swing.JFrame {
 
         paneles_general = new javax.swing.JTabbedPane();
         general = new javax.swing.JPanel();
-        map = new javax.swing.JPanel();
+        map = new maploader.NavegadorPrueba("web_resources/prueba_maps.html");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -95,10 +95,11 @@ public class CoreGUI extends javax.swing.JFrame {
             }
         });
     }
-
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel general;
-    private javax.swing.JPanel map;
+    private maploader.NavegadorPrueba map;
     private javax.swing.JTabbedPane paneles_general;
     // End of variables declaration//GEN-END:variables
 }

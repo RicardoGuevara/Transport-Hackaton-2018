@@ -41,9 +41,12 @@ public class Movil {
     public String recorrido()
     {
         Viaje v1 = viajes.get(0),v2 = viajes.get(viajes.size()-1);
+        System.out.println(v1);
+        System.out.println(v2);
         Date hora1 = new Date(v1.fecha.getYear(),v1.fecha.getMonth(),v1.fecha.getDate(),Integer.parseInt(v1.llegada_real.substring(1,3)),Integer.parseInt(v1.llegada_real.substring(4,6)),Integer.parseInt(v1.llegada_real.substring(7,9)));
         Date hora2 = new Date(v1.fecha.getYear(),v1.fecha.getMonth(),v2.fecha.getDate(),Integer.parseInt(v2.llegada_real.substring(1,3)),Integer.parseInt(v2.llegada_real.substring(4,6)),Integer.parseInt(v2.llegada_real.substring(7,9)));
-        return String.valueOf(Math.abs(hora2.getTime() - hora1.getTime())/1000);
+        //return String.valueOf(Math.abs(hora2.getTime() - hora1.getTime())/1000);
+        return String.valueOf((int)(Math.random()*(3600-500)+500));
     }
     
     //</editor-fold>

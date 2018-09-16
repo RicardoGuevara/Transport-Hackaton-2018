@@ -21,6 +21,7 @@ public class Log extends javax.swing.JFrame {
      */
     public Log() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**

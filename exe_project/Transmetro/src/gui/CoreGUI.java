@@ -5,6 +5,8 @@
  */
 package gui;
 
+import javax.swing.JTable;
+
 /**
  *
  * @author rick
@@ -16,6 +18,9 @@ public class CoreGUI extends javax.swing.JFrame {
      */
     public CoreGUI() {
         initComponents();
+        String[] titulos = {"RUTA","SERVICIO","RECORRIDO"};
+        recorrido_buses = new JTable(new String[3][0],titulos);
+        recorrido_buses.updateUI();
     }
 
     /**
@@ -29,7 +34,9 @@ public class CoreGUI extends javax.swing.JFrame {
 
         paneles_general = new javax.swing.JTabbedPane();
         general = new javax.swing.JPanel();
-        map = new maploader.NavegadorPrueba("web_resources/prueba_maps.html");
+        map = new javax.swing.JPanel();
+        general_buses = new javax.swing.JScrollPane();
+        recorrido_buses = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -37,12 +44,27 @@ public class CoreGUI extends javax.swing.JFrame {
         map.setMinimumSize(new java.awt.Dimension(50, 50));
         map.setPreferredSize(new java.awt.Dimension(500, 500));
 
+        recorrido_buses.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        general_buses.setViewportView(recorrido_buses);
+
         javax.swing.GroupLayout generalLayout = new javax.swing.GroupLayout(general);
         general.setLayout(generalLayout);
         generalLayout.setHorizontalGroup(
             generalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, generalLayout.createSequentialGroup()
-                .addContainerGap(592, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(general_buses, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(map, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -50,7 +72,9 @@ public class CoreGUI extends javax.swing.JFrame {
             generalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(generalLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(map, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(generalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(map, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(general_buses, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
@@ -99,7 +123,9 @@ public class CoreGUI extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel general;
-    private maploader.NavegadorPrueba map;
+    private javax.swing.JScrollPane general_buses;
+    private javax.swing.JPanel map;
     private javax.swing.JTabbedPane paneles_general;
+    private javax.swing.JTable recorrido_buses;
     // End of variables declaration//GEN-END:variables
 }

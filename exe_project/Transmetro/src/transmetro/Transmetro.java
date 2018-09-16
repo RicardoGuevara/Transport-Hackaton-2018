@@ -9,10 +9,13 @@ import gui.Log;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import javax.swing.JOptionPane;
 import models.Movil;
 import models.Parada;
+import models.Viaje;
 
 /**
  *
@@ -25,6 +28,8 @@ public class Transmetro {
      */
     public static void main(String[] args) 
     {
+        moviles = new ArrayList<Movil>();
+        paradas = new ArrayList<Parada>();
         new Transmetro().simular_bd("CONSULTA_DERLY.sql");
         try {Thread.sleep(3000);} catch (Exception e) {if(DEBUG)System.out.println("error del thread principal");e.printStackTrace();}
         flipScreen(new Log()); // ventana de log in
@@ -35,6 +40,35 @@ public class Transmetro {
     public static boolean DEBUG = true;
     public static ArrayList<Movil> moviles;
     public static ArrayList<Parada> paradas;
+    
+    public static Parada getParada(String id)
+    {
+        for (Parada parada : paradas)
+        {
+            if (parada.equals(id))return parada;
+        }
+        return null;
+    }
+    
+    public static Movil getMovil(String ruta, String servicio)
+    {
+        short so =Short.parseShort(servicio);
+        for (Movil movile : moviles)
+        {
+            if(movile.getRuta().equals(ruta) && movile.getServicio() == so) return movile;
+        }
+        return null;
+    }
+    
+    public void test()
+    {
+        for (Parada parada : paradas) System.out.println(parada);
+        System.out.println("_______________________________________________________");
+        for (Movil movile : moviles) {
+            System.out.println(movile);
+            for (Viaje viaje : movile.getViajes()) System.out.println(" "+viaje);
+        }
+    }
     
     //<editor-fold defaulstate="collapsed" desc="SIMULAR BBDD">
     
@@ -72,15 +106,24 @@ public class Transmetro {
                     String[] values;
                     while((line=reader.readLine())!=null)
                     {
-                        if(!line.contains("insert into")) {writer.write(line);writer.newLine();continue;};
-                        if(line.contains("HistoriaViajes")) break;
-                        if(line.contains("NULL")) { ++error;   continue; };
-                        writer.write(line);writer.newLine();
-                        line = line.substring(line.indexOf("("), line.indexOf(")"));
-                        values = line.split(",");
-                        
-                        
-                        
+                        try {
+
+                            if(!line.contains("insert into")) {writer.write(line);writer.newLine();continue;};
+                            if(line.contains("HistoriaViajes")) break;
+                            if(line.contains("NULL")) { ++error;   continue; };
+                            writer.write(line);writer.newLine();
+                            line = line.substring(line.indexOf("(")+1, line.indexOf(")"));
+                            values = line.split(",");
+                            new Parada(values);
+                        }
+                        catch (Exception e) 
+                        {
+                            if(transmetro.Transmetro.DEBUG)
+                            {
+                                //System.out.println("error in line traduction");
+                                //e.printStackTrace();
+                            }
+                        }
                     }
                     reader.close();
                 }
@@ -99,24 +142,44 @@ public class Transmetro {
             {
                 try (BufferedReader reader = new BufferedReader(new java.io.FileReader(fr)))
                 {
+                    Calendar c = Calendar.getInstance();
                     FileWriter fw = new FileWriter("out_historias");
                     BufferedWriter writer = new BufferedWriter(fw);
-                    String line;
+                    String  line,
+                            today_date=Integer.toString(c.get(Calendar.YEAR))+"-"+Integer.toString(c.get(Calendar.MONTH))+"-"+Integer.toString(c.get(Calendar.DATE));
+                    
+                    // base de datos simulada
+                    today_date="2018-08-01";
+                    // fin tramuyo
+                    
+                    
                     String[] values;
                     while((line=reader.readLine())!=null)
                     {
-                        if(!line.contains("HistoriaViajes")|| !line.contains("insert into")) continue;
-                        if(line.contains("NULL")) { ++error;   continue; };
-                        writer.write(line);;writer.newLine();
-                        line = line.substring(line.indexOf("("), line.indexOf(")"));
-                        values = line.split(",");
-                        
+                        try
+                        {
+                           if(!line.contains("HistoriaViajes")|| !line.contains("insert into")) continue;
+                           if(line.contains("NULL")) { ++error;   continue; };
+                           if(!line.contains(today_date))continue;
+                           writer.write(line);writer.newLine();
+                           line = line.substring(line.indexOf("(")+1, line.indexOf(")"));
+                           values = line.split(",");
+                           new Viaje(values);   
+                        }
+                        catch (Exception e)
+                        {
+                            if(transmetro.Transmetro.DEBUG)
+                            {
+                                //System.out.println("error in line traduction");
+                                //e.printStackTrace();
+                            }
+                        }
                     }
                     reader.close();
                 }
                 catch (Exception e)
                 {
-                    if(transmetro.Transmetro.DEBUG) System.out.println("Error en el hilo de separado de paradas");
+                    if(transmetro.Transmetro.DEBUG) System.out.println("Error en el hilo de separado de historias");
                     if(transmetro.Transmetro.DEBUG) e.printStackTrace();
                 }
             }
@@ -125,6 +188,7 @@ public class Transmetro {
         try 
         {
             paradas.run();
+            Thread.sleep(3000);
             historias.run();
             Thread.sleep(3000);
             write_new_db(new java.io.FileReader("out_paradas"),new java.io.FileReader("out_historias"));
@@ -133,6 +197,9 @@ public class Transmetro {
         {
             if(transmetro.Transmetro.DEBUG) {System.out.println("error de threading o transcripción");e.printStackTrace();}
         }
+        
+        System.out.println("funciona");
+        if(transmetro.Transmetro.DEBUG) test();
     }
     
     private void write_new_db(java.io.FileReader paradas,java.io.FileReader historias)

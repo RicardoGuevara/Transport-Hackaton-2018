@@ -9,8 +9,10 @@ import gui.CoreGUI;
 import gui.Log;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,14 +39,17 @@ public class Transmetro {
         t.simular_bd("CONSULTA_DERLY.sql");
         try {Thread.sleep(3000);} catch (Exception e) {if(DEBUG)System.out.println("error del thread principal");e.printStackTrace();}
         t.map_paradas_config();
-        flipScreen(new CoreGUI()); // ventana principal
-        //flipScreen(new Log()); // ventana principal
+        //flipScreen(new CoreGUI()); // ventana principal
+        flipScreen(new Log()); // ventana principal
+        
+        try {transferencia();}
+        catch (Exception e) {}
         
     }
     
     public static int error;
     
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     public static ArrayList<Movil> moviles;
     public static ArrayList<Parada> paradas;
     
@@ -85,12 +90,12 @@ public class Transmetro {
         try
         {
             BufferedReader br = new BufferedReader(new FileReader("web_resources/base_puntos.html"));
-            BufferedWriter bw = new BufferedWriter(new FileWriter("web_resources/actual_puntos.html"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("web_resources/prueba_maps.html"));
             
             String line;
             while((line=br.readLine())!=null)
             {
-                if(line.equals("kill_me_plss"))
+                if(line.contains("kill_me_plss"))
                 {
                     for (Parada parada : paradas) {
                         bw.write("posicion = {lat: "+parada.getY()+",lng: "+parada.getX()+"};");
@@ -99,7 +104,10 @@ public class Transmetro {
                         bw.newLine();
                     }
                 }
-                else bw.write(line);
+                else{
+                    bw.write(line);
+                    bw.newLine();
+                }
             }
             
             br.close();
@@ -111,8 +119,46 @@ public class Transmetro {
         }
     }
     
+    //<editor-fold defaultstate="collapsed" desc="TRANSFERENCIA DE DATOS">
     
-    //<editor-fold defaulstate="collapsed" desc="SIMULAR BBDD">
+    public static void transferencia() throws IOException
+    {
+        File envio = new File("envio");
+        BufferedWriter bf = new BufferedWriter(new FileWriter(envio));
+        String a;
+        bf.write("errores de medicion:"+error);
+        bf.newLine();
+        
+        for (Movil movile : moviles)
+        {
+            if (
+                    movile.getRuta().startsWith("R1")||
+                    movile.getRuta().startsWith("R2")||
+                    movile.getRuta().startsWith("B1")||
+                    movile.getRuta().startsWith("B2")||
+                    movile.getRuta().startsWith("S1")||
+                    movile.getRuta().startsWith("S2")) 
+            {
+                for (Viaje viaje : movile.getViajes())
+                {
+                    if ((a=getParada(String.valueOf(viaje.getParada())).getNombre()).startsWith("Est."))
+                    {
+                        bf.write(movile.getRuta()+","+a+","+viaje.getLlegada()+","+viaje.getLlegada_real()+","+viaje.getSalida()+","+viaje.getSalida_real());
+                        bf.newLine();
+                    }
+                }
+            }
+        }
+        
+        bf.close();
+        
+        //implementación de envió por ftp pendiente debido a inconvenientes con la red de la universidad
+        //new Upload("10.20.17.32","","").inUpload(envio.getAbsolutePath());
+    }
+    
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="SIMULAR BBDD">
     
     private void simular_bd(String sql_file)
     {   
@@ -140,9 +186,10 @@ public class Transmetro {
             @Override
             public void run()
             {
-                try (BufferedReader reader = new BufferedReader(new java.io.FileReader(fr)))
+                //try (BufferedReader reader = new BufferedReader(new java.io.FileReader(fr)))
+                try (BufferedReader reader = new BufferedReader(new java.io.FileReader("out_paradas")))
                 {
-                    FileWriter fw = new FileWriter("out_paradas");
+                    FileWriter fw = new FileWriter("out");
                     BufferedWriter writer = new BufferedWriter(fw);
                     String line;
                     String[] values;
@@ -182,10 +229,11 @@ public class Transmetro {
             @Override
             public void run()
             {
-                try (BufferedReader reader = new BufferedReader(new java.io.FileReader(fr)))
+                //try (BufferedReader reader = new BufferedReader(new java.io.FileReader(fr)))
+                try (BufferedReader reader = new BufferedReader(new java.io.FileReader("out_historias")))
                 {
                     Calendar c = Calendar.getInstance();
-                    FileWriter fw = new FileWriter("out_historias");
+                    FileWriter fw = new FileWriter("out");
                     BufferedWriter writer = new BufferedWriter(fw);
                     String  line,
                             today_date=Integer.toString(c.get(Calendar.YEAR))+"-"+Integer.toString(c.get(Calendar.MONTH))+"-"+Integer.toString(c.get(Calendar.DATE));

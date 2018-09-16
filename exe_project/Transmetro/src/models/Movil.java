@@ -6,6 +6,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -36,6 +37,15 @@ public class Movil {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="METODOS">
+    
+    public String recorrido()
+    {
+        Viaje v1 = viajes.get(0),v2 = viajes.get(viajes.size()-1);
+        Date hora1 = new Date(v1.fecha.getYear(),v1.fecha.getMonth(),v1.fecha.getDate(),Integer.parseInt(v1.llegada_real.substring(1,3)),Integer.parseInt(v1.llegada_real.substring(4,6)),Integer.parseInt(v1.llegada_real.substring(7,9)));
+        Date hora2 = new Date(v1.fecha.getYear(),v1.fecha.getMonth(),v2.fecha.getDate(),Integer.parseInt(v2.llegada_real.substring(1,3)),Integer.parseInt(v2.llegada_real.substring(4,6)),Integer.parseInt(v2.llegada_real.substring(7,9)));
+        return String.valueOf(Math.abs(hora2.getTime() - hora1.getTime())/1000);
+    }
+    
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="ATRIBUTOS">

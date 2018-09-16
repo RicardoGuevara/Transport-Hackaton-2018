@@ -15,30 +15,12 @@
 </head>
 <body>
     <br>
-    <div id="data" height="10%">
-        <span>LATITUD</span>
-        <input id="latitud" type="text"/>
-        <br>
-        <span>LONGITUD</span>
-        <input id="longitud" type="text"/>
-    </div>
-    <div id="bot" height="10%">
-        <input id="locate" type="button" value="LOCALIZAR"/>
-    </div>
-    <br>
     <div id="map"></div>
     <script>
-        var latitud = document.getElementById("latitud");
-        var longitud = document.getElementById("longitud");
-        var btn_localizar = document.getElementById("locate");
-        
-        btn_localizar.addEventListener("click",locate);
-        
-        //window.onload = locate();
-        
+        window.onload = locate();
         function locate(){
-            var la = parseFloat(latitud.value);
-            var lo = parseFloat(longitud.value);
+            var la = 10;
+            var lo = -74;
             var options = 
             {
                 zoom: 8

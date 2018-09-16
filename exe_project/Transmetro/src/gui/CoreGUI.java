@@ -6,6 +6,8 @@
 package gui;
 
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import models.Movil;
 
 /**
  *
@@ -19,10 +21,22 @@ public class CoreGUI extends javax.swing.JFrame {
     public CoreGUI() {
         initComponents();
         String[] titulos = {"RUTA","SERVICIO","RECORRIDO"};
-        recorrido_buses = new JTable(new String[3][0],titulos);
-        recorrido_buses.updateUI();
+        mostrarRecorrido();
     }
 
+    public void mostrarRecorrido()
+    {
+        DefaultTableModel df = new DefaultTableModel();
+        df.addColumn("RUTA");df.addColumn("SERVICIO");df.addColumn("RECORRIDO");
+        
+        for (Movil movile : transmetro.Transmetro.moviles) {
+            String[] campos = {movile.getRuta(),String.valueOf(movile.getServicio()),movile.recorrido()};
+            df.addRow(campos);
+        }
+        recorrido_buses.setModel(df);
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -34,7 +48,7 @@ public class CoreGUI extends javax.swing.JFrame {
 
         paneles_general = new javax.swing.JTabbedPane();
         general = new javax.swing.JPanel();
-        map = new javax.swing.JPanel();
+        map = (javax.swing.JPanel)new maploader.NavegadorPrueba("web_resources/prueba_maps.html");
         general_buses = new javax.swing.JScrollPane();
         recorrido_buses = new javax.swing.JTable();
 
@@ -46,13 +60,10 @@ public class CoreGUI extends javax.swing.JFrame {
 
         recorrido_buses.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         general_buses.setViewportView(recorrido_buses);

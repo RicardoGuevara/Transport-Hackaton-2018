@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_casa"
+            android:title="Inicio" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_estacion"
+            android:title="Rutas" />
+        <item
+            android:id="@+id/nav_slideshow"
+            android:icon="@drawable/ic_notificacion"
+            android:title="Noticias" />
+    </group>
+
+    <item android:title="" >
+
+        <menu>
+            <item android:title=""/>
+            <item android:title=""/>
+            <item
+
+                android:title="(57)(5)3100020" />
+            <item
+                android:title="Carrera 57 # 99A - 65/Piso 15" />
+        </menu>
+    </item>
+
+</menu>

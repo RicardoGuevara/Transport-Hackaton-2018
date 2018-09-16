@@ -22,6 +22,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
   
@@ -33,7 +34,8 @@ public class NavegadorPrueba extends JPanel {
     private Stage stage;  
     private WebView browser;  
     private JFXPanel jfxPanel;  
-    private JButton swingButton;  
+    private JButton swingButton;
+    private JButton swingButton2;  
     private WebEngine webEngine;  
     public static String ruta;
   
@@ -83,7 +85,25 @@ public class NavegadorPrueba extends JPanel {
         });  
         swingButton.setText("Reload");  
          
-        add(swingButton, BorderLayout.SOUTH);  
+        
+        swingButton2 = new JButton();  
+        swingButton2.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Platform.runLater(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        externOpenURL();
+                    }
+                });
+            }
+        });  
+        swingButton2.setText("Ver en el navegador");  
+        
+        add(swingButton, BorderLayout.NORTH);
+        add(swingButton2, BorderLayout.SOUTH);
     }     
      
     public void changePag(String ruta){
@@ -95,6 +115,25 @@ public class NavegadorPrueba extends JPanel {
         this.ruta = ((System.getProperty("os.name").equals("Mac OS X"))? "file://":"file:///")+java.net.URI.create(file.getAbsolutePath()).toString();
         if(transmetro.Transmetro.DEBUG)System.out.println("parámetro: "+ruta);
         if(transmetro.Transmetro.DEBUG)System.out.println("Valor actual: "+this.ruta);
+    }
+    
+    public void externOpenURL()
+    {
+        externOpenURL(this.ruta);
+    }
+    
+    public void externOpenURL(String url)
+    {
+        boolean mac = System.getProperty("os.name").startsWith("Mac OS X");
+        try 
+        {
+            Runtime.getRuntime().exec((mac? "open ":"start ") + url);
+        }
+        catch (Exception e)
+        {
+            JOptionPane.showMessageDialog(this, "No hemos logrado encontrar tu navegador predeterminado \no tu sistema operativo no es compatible con esta función");
+            e.printStackTrace();
+        }
     }
     
     private void createScene() {  

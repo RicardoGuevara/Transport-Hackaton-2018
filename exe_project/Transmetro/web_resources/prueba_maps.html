@@ -17,19 +17,22 @@
     <br>
     <div id="map"></div>
     <script>
-        window.onload = locate();
-        function locate(){
-            var la = 10;
-            var lo = -74;
-            var options = 
-            {
-                zoom: 8
-                , center: new google.maps.LatLng(la,lo)
-                , mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            var map = new google.maps.Map(document.getElementById('map'), options);
-        }
+
+        function initMap() {
+        
+        var posicion = {lat: 10.9, lng: -74.9};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 8,
+          center: posicion
+        });
+
+        var marker = new google.maps.Marker({position: posicion,map: map,title: 'Hello World!'});
+        
+      }
     </script>
-    
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmIzxeGyAuc2NlgMimpjJLvbmWLKU0qqg&callback=initMap">
+    </script>
 </body>
 </html>

@@ -27,7 +27,7 @@ public class CoreGUI extends javax.swing.JFrame {
     public void mostrarRecorrido()
     {
         DefaultTableModel df = new DefaultTableModel();
-        df.addColumn("RUTA");df.addColumn("SERVICIO");df.addColumn("RECORRIDO");
+        df.addColumn("RUTA");df.addColumn("SERVICIO");df.addColumn("RECORRIDO (segundos)");
         
         for (Movil movile : transmetro.Transmetro.moviles) {
             String[] campos = {movile.getRuta(),String.valueOf(movile.getServicio()),movile.recorrido()};
@@ -48,7 +48,8 @@ public class CoreGUI extends javax.swing.JFrame {
 
         paneles_general = new javax.swing.JTabbedPane();
         general = new javax.swing.JPanel();
-        map = (javax.swing.JPanel)new maploader.NavegadorPrueba("web_resources/prueba_maps.html");
+        map = (javax.swing.JPanel)new maploader.NavegadorPrueba("web_resources/actual_puntos"
+            + ".html");
         general_buses = new javax.swing.JScrollPane();
         recorrido_buses = new javax.swing.JTable();
 

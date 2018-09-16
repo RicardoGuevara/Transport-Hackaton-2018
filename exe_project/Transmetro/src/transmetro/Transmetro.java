@@ -5,9 +5,11 @@
  */
 package transmetro;
 
+import gui.CoreGUI;
 import gui.Log;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -28,11 +30,16 @@ public class Transmetro {
      */
     public static void main(String[] args) 
     {
+        System.out.println("hola");
+        Transmetro t = new Transmetro();
         moviles = new ArrayList<Movil>();
         paradas = new ArrayList<Parada>();
-        new Transmetro().simular_bd("CONSULTA_DERLY.sql");
+        t.simular_bd("CONSULTA_DERLY.sql");
         try {Thread.sleep(3000);} catch (Exception e) {if(DEBUG)System.out.println("error del thread principal");e.printStackTrace();}
-        flipScreen(new Log()); // ventana de log in
+        t.map_paradas_config();
+        flipScreen(new CoreGUI()); // ventana principal
+        //flipScreen(new Log()); // ventana principal
+        
     }
     
     public static int error;
@@ -69,6 +76,41 @@ public class Transmetro {
             for (Viaje viaje : movile.getViajes()) System.out.println(" "+viaje);
         }
     }
+    
+    public void map_paradas_config()
+    {
+        //var posicion = {lat: 10.9, lng: -74.9};
+        //var marker = new google.maps.Marker({position: posicion,map: map,title: 'Hello World!'});
+        
+        try
+        {
+            BufferedReader br = new BufferedReader(new FileReader("web_resources/base_puntos.html"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("web_resources/actual_puntos.html"));
+            
+            String line;
+            while((line=br.readLine())!=null)
+            {
+                if(line.equals("kill_me_plss"))
+                {
+                    for (Parada parada : paradas) {
+                        bw.write("posicion = {lat: "+parada.getY()+",lng: "+parada.getX()+"};");
+                        bw.newLine();
+                        bw.write("marker = new google.maps.Marker({position: posicion,map: map,title: '"+parada.getNombre()+"'});");
+                        bw.newLine();
+                    }
+                }
+                else bw.write(line);
+            }
+            
+            br.close();
+            bw.close();
+        }
+        catch (Exception e)
+        {
+            if(DEBUG) e.printStackTrace();
+        }
+    }
+    
     
     //<editor-fold defaulstate="collapsed" desc="SIMULAR BBDD">
     

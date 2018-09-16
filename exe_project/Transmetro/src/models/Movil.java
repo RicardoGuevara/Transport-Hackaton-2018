@@ -16,7 +16,7 @@ public class Movil {
 
     //<editor-fold defaultstate="collapsed" desc="CONSTRUCTORES">
     public Movil(String ruta, short servicio) {
-        this.ruta = ruta;
+        this.ruta = ruta.substring(1,ruta.length()-1);
         this.servicio = servicio;
         viajes = new ArrayList<Viaje>();
         transmetro.Transmetro.moviles.add(this);

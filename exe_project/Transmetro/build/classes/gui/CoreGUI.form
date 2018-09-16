@@ -79,7 +79,7 @@
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="(javax.swing.JPanel)new maploader.NavegadorPrueba(&quot;web_resources/prueba_maps.html&quot;)"/>
+                <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="(javax.swing.JPanel)new maploader.NavegadorPrueba(&quot;web_resources/actual_puntos&quot;&#xa;+ &quot;.html&quot;)"/>
               </AuxValues>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
